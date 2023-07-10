@@ -10,9 +10,17 @@ export default function Home() {
         src="/images/awp/cu_awp_chroma_pink.png"
         width={500}
         height={500}
-        alt="Picture of the author"
+        alt="awp_chroma_pink"
     />
+    <Image
+        src="/images/awp/cu_medieval_dragon_awp.png"
+        width={500}
+        height={500}
+        alt="awp_medieval_dragon"
+    />
+    
 </div>
     </div>
+    
   )
 }
