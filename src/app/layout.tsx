@@ -12,13 +12,13 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (   
-    <>
+    <html lang="en">
       <div className="fixed top-0 ">
         <NavBar />
       </div>
       <div className='mt-20'>
         <main>{children}</main>
       </div>
-    </>
-  )
+    </html>
+  );
 }
