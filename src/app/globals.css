@@ -29,8 +29,8 @@
     --background-end-rgb: 0, 0, 0;
   }
 }
-
-body {
+/* Commented this out to get rid of the linear gradient */
+/* body {
   color: rgb(var(--foreground-rgb));
   background: linear-gradient(
       to bottom,
@@ -38,4 +38,4 @@ body {
       rgb(var(--background-end-rgb))
     )
     rgb(var(--background-start-rgb));
-}
+} */

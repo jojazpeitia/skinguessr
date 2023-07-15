@@ -1,10 +1,10 @@
 import { CounterStrike2Alt, SkinGuessr, Valorant } from './svgs';
 import Link from 'next/link';
 
-type NavBarIconProps = {
+interface NavBarIconProps {
     icon: React.ReactNode;
-    text?: string;
-    href?: any; // fix this later since we are bypassing typescript 
+    text: string | null;
+    href: any | null;
 }
 
 const NavBarIcon = ({ icon, text = 'tooltip 💡', href}: NavBarIconProps) => (
@@ -34,4 +34,4 @@ export default function NavMenu() {
              </div>
          </div>
     );
-  }
+}
