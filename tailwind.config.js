@@ -24,11 +24,15 @@ module.exports = {
           200: '#ebedef',
           100: '#f2f3f5'
         },
-    },
+      },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
         'gradient-conic':
           'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
+      },
+      scale: {
+        '200': '2',
+        '400': '4',
       },
     },
   },
