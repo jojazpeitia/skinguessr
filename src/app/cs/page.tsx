@@ -19,7 +19,7 @@ export default function CSPage() {
             <div className="flex justify-center w-screen">
                 <div className="relative max-w-screen-sm overflow-hidden border-4 border-gray-700 h-max" >
                     <Image
-                    src="/images/awp/cu_medieval_dragon_awp.png"
+                    src="/images/awp/cu_awp_chroma_pink.png"
                     height={4096}
                     width={4096}
                     quality={100}
