@@ -1,23 +1,33 @@
+'use client'
+
 import { useState } from 'react';
 import Image from 'next/image'
 
 export default function CSPage() {
     
-    const initialZoom = 2; 
-    const xAxisMovement = -158; 
-    const yAxisMovement = -158; 
+    // sets initial zoom to a value of 28.
+    const [initialZoom, setInitialZoom] = useState(28); 
+
+    const xAxisMovement = -210; 
+    const yAxisMovement = -250; 
     
     const imageStyle = {
         transform: `scale(${initialZoom}) translateX(${xAxisMovement}px) translateY(${yAxisMovement}px)`,
+        transition: 'transform 0.3s ease-in-out',
+    };
+
+    // zooms out to the value of 11
+    const handleZoomOut = () => {
+        setInitialZoom(prevZoom => prevZoom - 11); 
     };
     
     return (
-        <div >
+        <div>
             <div className="flex justify-center w-screen">
                 <h1> Counter-Strike </h1>
             </div>
-            <div className="flex justify-center w-screen">
-                <div className="relative max-w-screen-sm overflow-hidden border-4 border-gray-700 h-max" >
+            <div className="flex justify-center w-screen ">
+                <div className="relative max-w-screen-sm overflow-hidden border-4 border-gray-700 h-max">
                     <Image
                     src="/images/awp/cu_medieval_dragon_awp.png"
                     height={4096}
@@ -27,6 +37,11 @@ export default function CSPage() {
                     priority={true}
                     style={imageStyle}
                     />   
+                </div>
+                <div className="flex justify-center">
+                    <button onClick={handleZoomOut} className="px-4 py-2 text-white bg-red-500">
+                        Zoom Out
+                    </button>
                 </div>
             </div>
         </div>
