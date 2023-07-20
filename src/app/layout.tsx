@@ -14,12 +14,8 @@ export default function RootLayout({
   return (   
     <html lang="en">
       <body>
-        <div className="fixed top-0 ">
           <NavBar />
-        </div>
-        <div className='mt-20'>
           <main>{children}</main>
-        </div>
       </body>
     </html>
   );

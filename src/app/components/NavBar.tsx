@@ -22,7 +22,7 @@ const Divider = () => <hr className="navbar-hr"/>;
 
 export default function NavMenu() {
     return (
-         <div className="fixed flex items-center justify-center w-screen h-16 text-white shadow-lg bg-primary">
+         <div className="flex items-center justify-center w-screen h-16 text-white shadow-lg bg-primary">
              <div className="flex items-center space-x-8">
                 <NavBarIcon icon={<CounterStrike2Alt className="text-4xl" />} text="Counter Strike" href="/cs"/>
                 <Divider/>
