@@ -8,10 +8,8 @@ export default function CSPage() {
     // sets initial zoom to a value of 28.
     const [initialZoom, setInitialZoom] = useState(28); 
 
-    // const xAxisMovement = -210; 
-    // const yAxisMovement = -250; 
-    const xAxisMovement = 0;  // center x value 
-    const yAxisMovement = 0; // center y value 
+    const xAxisMovement = 0;  // -210 (backup value)
+    const yAxisMovement = 0; // -215 (backup value)
 
     
     const imageStyle = {
