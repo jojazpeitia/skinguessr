@@ -29,8 +29,8 @@ export default function CSPage() {
             <div className="flex justify-center w-screen">
                 <h1> Counter-Strike </h1>
             </div>
-            <div className="flex justify-center w-screen ">
-                <div className="relative max-w-screen-sm overflow-hidden border-4 border-gray-700 h-max">
+            <div className="flex justify-center w-screen">
+                <div className="relative max-w-screen-sm overflow-hidden border-4 border-gray-700 shadow-2xl h-max">
                     <Image
                     src="/images/awp/cu_medieval_dragon_awp.png"
                     height={4096}
@@ -41,7 +41,7 @@ export default function CSPage() {
                     style={imageStyle}
                     />   
                 </div>
-                <div className="flex justify-center">
+                <div className="flex justify-center shadow-2xl">
                     <button onClick={handleZoomOut} className="px-4 py-2 text-white bg-red-500">
                         Zoom Out
                     </button>
