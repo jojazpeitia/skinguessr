@@ -6,7 +6,7 @@ import Image from 'next/image'
 export default function CSPage() {
     
     // sets initial zoom to a value of 28.
-    const [initialZoom, setInitialZoom] = useState(28); 
+    const [initialZoom, setInitialZoom] = useState(28);  
 
     const xAxisMovement = 90;  // -210 (backup value)
     const yAxisMovement = 50; // -215 (backup value)
