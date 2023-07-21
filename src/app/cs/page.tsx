@@ -1,7 +1,8 @@
 'use client'
 
 import { useState } from 'react';
-import Image from 'next/image'
+import Image from 'next/image';
+import { Input } from "@/components/ui/input";
 
 export default function CSPage() {
     
@@ -24,27 +25,21 @@ export default function CSPage() {
     };
     
     return (
-        <div>
-            <div className="flex justify-center w-screen">
-                <h1> Counter-Strike </h1>
+        <div className="flex flex-col items-center justify-center mx-20 space-y-5 md:space-x-20 md:flex-row md:space-y-0">
+            <div className="max-w-screen-sm overflow-hidden border-4 border-gray-700 rounded shadow-sm absoluite h-max">
+                <Image
+                src="/images/awp/cu_medieval_dragon_awp.png"
+                height={4096}
+                width={4096}
+                quality={100}
+                alt="Dragon Lore"
+                priority={true}
+                style={imageStyle}
+                />   
             </div>
-            <div className="flex justify-center w-screen">
-                <div className="relative max-w-screen-sm overflow-hidden border-4 border-gray-700 rounded shadow-2xl h-max">
-                    <Image
-                    src="/images/awp/cu_medieval_dragon_awp.png"
-                    height={4096}
-                    width={4096}
-                    quality={100}
-                    alt="Dragon Lore"
-                    priority={true}
-                    style={imageStyle}
-                    />   
-                </div>
-                <div className="flex justify-center shadow-2xl">
-                    <button onClick={handleZoomOut} className="px-4 py-2 text-white bg-red-500 rounded">
-                        Zoom Out
-                    </button>
-                </div>
+            <div className='text-center '>
+                <h1 className='mb-2'> Place your guess: </h1>
+                <Input className='shadow-sm w-96'/>
             </div>
         </div>
     );
