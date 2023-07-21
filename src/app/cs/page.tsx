@@ -5,21 +5,24 @@ import Image from 'next/image';
 import { Input } from "@/components/ui/input";
 
 export default function CSPage() {
-    
-    // sets initial zoom to a value of 28.
-    const [initialZoom, setInitialZoom] = useState(28);  
+    const [initialZoom, setInitialZoom] = useState(28); 
+     
+    const xAxisMovement: number = 90;  // -210 (backup value)
+    const yAxisMovement: number = 50; // -215 (backup value)
 
-    const xAxisMovement = 90;  // -210 (backup value)
-    const yAxisMovement = 50; // -215 (backup value)
+    // defines a type for the image style
+    type ImageStyle = {
+    transform: string;
+    transition: string;
+    transformOrigin: string;
+  };
 
-    
-    const imageStyle = {
+    const imageStyle: ImageStyle = {
         transform: `scale(${initialZoom}) translateX(${xAxisMovement}px) translateY(${yAxisMovement}px)`,
         transition: 'transform 0.3s ease-in-out',
         transformOrigin: 'bottom right', // Zoom from the top-left corner
     };
 
-    // zooms out to the value of 11
     const handleZoomOut = () => {
         setInitialZoom(prevZoom => prevZoom - 11); 
     };
@@ -40,9 +43,9 @@ export default function CSPage() {
             <div className='text-center '>
                 <h1 className='mb-2 text-xl'> Place your guess: </h1>
                 <Input className='shadow-sm w-96'/>
-                <button onClick={handleZoomOut} className="px-4 py-2 mt-4 text-white bg-red-500 rounded-md">
+                {/* <button onClick={handleZoomOut} className="px-4 py-2 mt-4 text-white bg-red-500 rounded-md">
                         Zoom Out
-                </button>
+                </button> */}
             </div>
         </div>
     );
