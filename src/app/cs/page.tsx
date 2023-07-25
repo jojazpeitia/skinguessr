@@ -31,7 +31,7 @@ export default function CSPage() {
     };
 
     // client-side data fetching
-    // fetches api only on page load
+    // fetches api on page load
     // ^ might need to optimize (caching)
     // https://nextjs.org/docs/pages/building-your-application/data-fetching/client-side
     useEffect(() => {
@@ -69,38 +69,39 @@ export default function CSPage() {
                     className='shadow-sm w-96'
                 />            
                 {filteredSuggestions.length > 0 && userInput.length > 0 && (
-                    <ul className="absolute mt-2 bg-white rounded-md shadow-md w-96">
-                    {filteredSuggestions.slice(0, 10).map((suggestion) => {
-                        
-                        const index = suggestion.toLowerCase().indexOf(userInput.toLowerCase());
-                        if (index >= 0) {
-                            return (
-                                <li
-                                    key={suggestion}
-                                    className="px-4 py-2 cursor-pointer"
-                                    // onClick={() => handleSuggestionSelect(suggestion)}
-                                >
-                                    {suggestion.substring(0, index)}
-                                <span className="text-red-500">
-                                    {suggestion.substring(index, index + userInput.length)} 
-                                </span>
-                                    {suggestion.substring(index + userInput.length)}
-                                </li>
-                                );
-                            } else {
-                            return (
-                                <li
-                                    key={suggestion}
-                                    className="px-4 py-2 cursor-pointer"
-                                    // onClick={() => handleSuggestionSelect(suggestion)}
-                                >
-                                    {suggestion}
-                                </li>
-                                );
-                            }
-                        })}
-                    </ul>
-                )}                  
+                    <div className="absolute mt-2 overflow-y-auto bg-white rounded-sm shadow-md w-96 max-h-80"> 
+                        <ul>
+                            {filteredSuggestions.map((suggestion) => {
+                                const index = suggestion.toLowerCase().indexOf(userInput.toLowerCase());
+                                if (index >= 0) {
+                                    return (
+                                        <li
+                                            key={suggestion}
+                                            className="px-4 py-2 cursor-pointer"
+                                            // onClick={() => handleSuggestionSelect(suggestion)}
+                                        >
+                                            {suggestion.substring(0, index)}
+                                            <span className="text-red-500">
+                                                {suggestion.substring(index, index + userInput.length)} 
+                                            </span>
+                                            {suggestion.substring(index + userInput.length)}
+                                        </li>
+                                    );
+                                } else {
+                                    return (
+                                        <li
+                                            key={suggestion}
+                                            className="px-4 py-2 cursor-pointer"
+                                            // onClick={() => handleSuggestionSelect(suggestion)}
+                                        >
+                                            {suggestion}
+                                        </li>
+                                    );
+                                }
+                            })}
+                        </ul>
+                    </div>
+                )}
             </div> 
         </div>
     );
