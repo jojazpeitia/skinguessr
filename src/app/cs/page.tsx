@@ -9,6 +9,7 @@ export default function CSPage() {
     const [initialZoom, setInitialZoom] = useState<number>(28); 
     const [userInput, setUserInput] = useState<string>('');
     const [data, setData]= useState<string[]>([]);
+    const [showSuggestions, setShowSuggestions] = useState<boolean>(false);
 
     const xAxisMovement: number = 90;  // -210 (backup value)
     const yAxisMovement: number = 50; // -215 (backup value)
@@ -48,6 +49,10 @@ export default function CSPage() {
         name.toLowerCase().includes(userInput.toLowerCase())
     );
 
+    const handleInputBlur = () => {
+        setShowSuggestions(false);
+    };
+
     return (
         <div className="flex flex-col items-center justify-center mx-20 space-y-5 md:space-x-20 md:flex-row md:space-y-0 md:min-w-fit">
             <div className="relative overflow-hidden border-4 border-gray-700 rounded shadow-sm h-96 w-96 ">
@@ -67,11 +72,13 @@ export default function CSPage() {
                     value={userInput}
                     onInput={handleInputChange}
                     className='shadow-sm w-96'
+                    onFocus={() => setShowSuggestions(true)} // when element is focused
+                    onBlur={handleInputBlur} // when element loses focus
                 />            
                 {filteredSuggestions.length > 0 && userInput.length > 0 && (
                     <div className="absolute mt-2 overflow-y-auto bg-white rounded-sm shadow-md w-96 max-h-80"> 
                         <ul>
-                            {filteredSuggestions.map((suggestion) => {
+                            {showSuggestions && filteredSuggestions.map((suggestion) => {
                                 const index = suggestion.toLowerCase().indexOf(userInput.toLowerCase());
                                 if (index >= 0) {
                                     return (
