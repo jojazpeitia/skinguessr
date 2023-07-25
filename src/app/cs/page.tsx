@@ -50,7 +50,15 @@ export default function CSPage() {
     );
 
     const handleInputBlur = () => {
-        setShowSuggestions(false);
+        // setShowSuggestions(false);
+        setTimeout(() => {
+            setShowSuggestions(false);
+        }, 100); //100ms
+    };
+
+    const handleSuggestionSelect = (suggestion: string) => {
+        setUserInput(suggestion);
+        setShowSuggestions(false); // Hide the suggestions after selection if needed
     };
 
     return (
@@ -71,9 +79,9 @@ export default function CSPage() {
                 <Input 
                     value={userInput}
                     onInput={handleInputChange}
-                    className='shadow-sm w-96'
                     onFocus={() => setShowSuggestions(true)} // when element is focused
                     onBlur={handleInputBlur} // when element loses focus
+                    className='shadow-sm w-96'
                 />            
                 {filteredSuggestions.length > 0 && userInput.length > 0 && (
                     <div className="absolute mt-2 overflow-y-auto bg-white rounded-sm shadow-md w-96 max-h-80"> 
@@ -85,7 +93,7 @@ export default function CSPage() {
                                         <li
                                             key={suggestion}
                                             className="px-4 py-2 cursor-pointer"
-                                            // onClick={() => handleSuggestionSelect(suggestion)}
+                                            onClick={() => handleSuggestionSelect(suggestion)}
                                         >
                                             {suggestion.substring(0, index)}
                                             <span className="text-red-500">
@@ -99,7 +107,7 @@ export default function CSPage() {
                                         <li
                                             key={suggestion}
                                             className="px-4 py-2 cursor-pointer"
-                                            // onClick={() => handleSuggestionSelect(suggestion)}
+                                            onClick={() => handleSuggestionSelect(suggestion)}
                                         >
                                             {suggestion}
                                         </li>
