@@ -1,12 +1,15 @@
 'use client'
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { Input } from "@/components/ui/input";
 
 export default function CSPage() {
-    const [initialZoom, setInitialZoom] = useState(28); 
-     
+
+    const [initialZoom, setInitialZoom] = useState<number>(28); 
+    const [userInput, setUserInput] = useState<string>('');
+    const [data, setData]= useState<string[]>([]);
+
     const xAxisMovement: number = 90;  // -210 (backup value)
     const yAxisMovement: number = 50; // -215 (backup value)
 
@@ -23,10 +26,28 @@ export default function CSPage() {
         transformOrigin: 'bottom right', // Zoom from the top-left corner
     };
 
-    const handleZoomOut = () => {
-        setInitialZoom(prevZoom => prevZoom - 11); 
+    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setUserInput(event.target.value);
     };
+
+    // client-side data fetching
+    // fetches api only on page load
+    // ^ might need to optimize (caching)
+    // https://nextjs.org/docs/pages/building-your-application/data-fetching/client-side
+    useEffect(() => {
+        fetch('https://skinguessr.vercel.app/api/content')
+          .then((res) => res.json())
+          .then((data) => {
+            setData(data)
+          })
+    }, [])
     
+
+    // Filter the suggestions based on the user input
+    const filteredSuggestions = data.filter((name: any) =>
+        name.toLowerCase().includes(userInput.toLowerCase())
+    );
+
     return (
         <div className="flex flex-col items-center justify-center mx-20 space-y-5 md:space-x-20 md:flex-row md:space-y-0 md:min-w-fit">
             <div className="relative overflow-hidden border-4 border-gray-700 rounded shadow-sm h-96 w-96 ">
@@ -40,13 +61,47 @@ export default function CSPage() {
                 style={imageStyle}
                 />   
             </div>
-            <div className='text-center '>
-                <h1 className='mb-2 text-xl'> Place your guess: </h1>
-                <Input className='shadow-sm w-96'/>
-                {/* <button onClick={handleZoomOut} className="px-4 py-2 mt-4 text-white bg-red-500 rounded-md">
-                        Zoom Out
-                </button> */}
-            </div>
+            <div className='text-center'>
+                <h1 className='mb-2 text-2xl italic'> PLACE YOUR GUESS: </h1>
+                <Input 
+                    value={userInput}
+                    onInput={handleInputChange}
+                    className='shadow-sm w-96'
+                />            
+                {filteredSuggestions.length > 0 && userInput.length > 0 && (
+                    <ul className="absolute mt-2 bg-white rounded-md shadow-md w-96">
+                    {filteredSuggestions.slice(0, 10).map((suggestion) => {
+                        
+                        const index = suggestion.toLowerCase().indexOf(userInput.toLowerCase());
+                        if (index >= 0) {
+                            return (
+                                <li
+                                    key={suggestion}
+                                    className="px-4 py-2 cursor-pointer"
+                                    // onClick={() => handleSuggestionSelect(suggestion)}
+                                >
+                                    {suggestion.substring(0, index)}
+                                <span className="text-red-500">
+                                    {suggestion.substring(index, index + userInput.length)} 
+                                </span>
+                                    {suggestion.substring(index + userInput.length)}
+                                </li>
+                                );
+                            } else {
+                            return (
+                                <li
+                                    key={suggestion}
+                                    className="px-4 py-2 cursor-pointer"
+                                    // onClick={() => handleSuggestionSelect(suggestion)}
+                                >
+                                    {suggestion}
+                                </li>
+                                );
+                            }
+                        })}
+                    </ul>
+                )}                  
+            </div> 
         </div>
     );
-  }
+}
