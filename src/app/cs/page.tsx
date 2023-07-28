@@ -4,15 +4,14 @@ import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { skinData } from "@/app/api/content/route";
 
 export default function CSPage() {
 
     const [initialZoom, setInitialZoom] = useState<number>(28); 
     const [userInput, setUserInput] = useState<string>('');
-    // const [data, setData]= useState<string[]>([]);
+    const [data, setData]= useState<string[]>([]);
     const [showSuggestions, setShowSuggestions] = useState<boolean>(false);
-    const data = skinData
+
 
     const xAxisMovement: number = 90;  // -210 (backup value)
     const yAxisMovement: number = 50; // -215 (backup value)
@@ -38,13 +37,13 @@ export default function CSPage() {
     // fetches api on page load
     // ^ might need to optimize (caching)
     // https://nextjs.org/docs/pages/building-your-application/data-fetching/client-side
-    // useEffect(() => {
-    //     fetch('https://skinguessr.vercel.app/api/content')
-    //       .then((res) => res.json())
-    //       .then((data) => {
-    //         setData(data)
-    //       })
-    // }, [])
+    useEffect(() => {
+        fetch('https://skinguessr.vercel.app/api/content')
+          .then((res) => res.json())
+          .then((data) => {
+            setData(data)
+          })
+    }, [])
     
 
     // Filter the suggestions based on the user input
