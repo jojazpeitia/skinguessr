@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 
 export default function CSPage() {
 
@@ -11,6 +11,7 @@ export default function CSPage() {
     const [userInput, setUserInput] = useState<string>('');
     const [data, setData]= useState<string[]>([]);
     const [showSuggestions, setShowSuggestions] = useState<boolean>(false);
+
 
     const xAxisMovement: number = 90;  // -210 (backup value)
     const yAxisMovement: number = 50; // -215 (backup value)
@@ -120,7 +121,7 @@ export default function CSPage() {
                 )}
                 <Button 
                     variant="outline" 
-                    className='mt-2 text-lg shadow-sm'>SUBMIT
+                    className='mt-4 text-lg shadow-sm'>SUBMIT
                 </Button>
             </div> 
         </div>
