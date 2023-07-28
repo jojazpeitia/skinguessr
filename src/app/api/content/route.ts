@@ -1,4 +1,4 @@
-const skinData = [
+export const skinData = [
     "AK-47 | Aquamarine Revenge",
     "AK-47 | Asiimov",
     "AK-47 | Baroque Purple",
