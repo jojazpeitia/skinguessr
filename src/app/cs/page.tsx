@@ -6,12 +6,17 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
 export default function CSPage() {
-
     const [initialZoom, setInitialZoom] = useState<number>(28); 
     const [userInput, setUserInput] = useState<string>('');
+
+    // Autofill stuff 
     const [data, setData]= useState<string[]>([]);
     const [showSuggestions, setShowSuggestions] = useState<boolean>(false);
 
+    // Guessing stuff
+    const [isCorrect, setIsCorrect] = useState<boolean>(false);
+    const [attemptedSubmit, setAttemptedSubmit] = useState<boolean>(false);
+    const imageID: number = 0;
 
     const xAxisMovement: number = 90;  // -210 (backup value)
     const yAxisMovement: number = 50; // -215 (backup value)
@@ -61,6 +66,17 @@ export default function CSPage() {
     const handleSuggestionSelect = (suggestion: string) => {
         setUserInput(suggestion);
         setShowSuggestions(false); // Hide the suggestions after selection if needed
+    };
+
+    const handleSubmit = () => {
+        // pass the input field
+        // if dragon lore convert to 0 and match to imageID
+        if (userInput == "AWP | Dragon Lore") {
+            setIsCorrect(true);
+        } else {
+            setInitialZoom(prevZoom => prevZoom - 11); 
+        }
+        setAttemptedSubmit(true);
     };
 
     return (
@@ -120,9 +136,13 @@ export default function CSPage() {
                     </div>
                 )}
                 <Button 
+                    onClick={handleSubmit}
                     variant="outline" 
-                    className='mt-4 text-lg shadow-sm'>SUBMIT
+                    className='w-24 mt-4 text-lg shadow-sm'>
+                    {attemptedSubmit ? (isCorrect ? 'Next' : 'Submit') : 'Submit'}
                 </Button>
+                {attemptedSubmit && isCorrect && <p className="mt-2 text-lg text-green-500">Correct!</p>}
+                {attemptedSubmit && !isCorrect && <p className="mt-2 text-lg text-red-500">Incorrect!</p>}
             </div> 
         </div>
     );
