@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button"
 
 export default function CSPage() {
 
@@ -117,6 +118,10 @@ export default function CSPage() {
                         </ul>
                     </div>
                 )}
+                <Button 
+                    variant="outline" 
+                    className='mt-2 text-lg shadow-sm'>SUBMIT
+                </Button>
             </div> 
         </div>
     );
