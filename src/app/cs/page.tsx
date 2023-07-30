@@ -16,6 +16,7 @@ export default function CSPage() {
     // Guessing stuff
     const [isCorrect, setIsCorrect] = useState<boolean>(false);
     const [attemptedSubmit, setAttemptedSubmit] = useState<boolean>(false);
+    const [failedAttempts, setFailedAttempts] = useState<number>(0);
     const imageID: number = 0;
 
     const xAxisMovement: number = 90;  // -210 (backup value)
@@ -75,9 +76,24 @@ export default function CSPage() {
             setIsCorrect(true);
         } else {
             setInitialZoom(prevZoom => prevZoom - 11); 
+            setFailedAttempts((prevAttempts) => prevAttempts + 1); // Increment failed attempts
         }
         setAttemptedSubmit(true);
     };
+
+    // this is called when failed attempts changes.
+    useEffect(() => {
+        if (failedAttempts >= 3) {
+          // Show the pop-up to inform the user that they lost
+          alert('You have lost! Please try again.');
+          // Reset the game
+          setIsCorrect(false);
+          setInitialZoom(28);
+          setUserInput('');
+          setAttemptedSubmit(false);
+          setFailedAttempts(0);
+        }
+      }, [failedAttempts]);
 
     return (
         <div className="flex flex-col items-center justify-center mx-20 space-y-5 md:space-x-20 md:flex-row md:space-y-0 md:min-w-fit">
