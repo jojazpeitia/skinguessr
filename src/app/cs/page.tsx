@@ -135,7 +135,7 @@ export default function CSPage() {
                     className='shadow-sm w-96'
                 />            
                 {filteredSuggestions.length > 0 && userInput.length > 0 && (
-                    <div className="absolute mt-2 overflow-y-auto bg-white rounded-sm shadow-md w-96 max-h-80"> 
+                    <div className="absolute z-50 mt-2 overflow-y-auto bg-white rounded-sm shadow-md w-96 max-h-80"> 
                         <ul>
                             {showSuggestions && filteredSuggestions.map((suggestion) => {
                                 const index = suggestion.toLowerCase().indexOf(userInput.toLowerCase());
@@ -174,8 +174,8 @@ export default function CSPage() {
                     className='w-24 mt-4 text-lg shadow-sm'>
                     {attemptedSubmit ? (isCorrect ? 'Next' : 'Submit') : 'Submit'}
                 </Button>
-                {attemptedSubmit && isCorrect && <p className="mt-2 text-lg text-green-500">Correct!</p>}
-                {attemptedSubmit && !isCorrect && <p className="mt-2 text-lg text-red-500">Incorrect!</p>}
+                {attemptedSubmit && isCorrect && <p className="absolute pl-40 mt-4 text-lg text-green-500">Correct!</p>}
+                {attemptedSubmit && !isCorrect && <p className="absolute pl-40 mt-4 text-lg text-red-500">Incorrect!</p>}
             </div> 
             <Dialog open={showScareDialog} onOpenChange={() => setShowScareDialog(false)}>
                 <DialogContent className={`${rajdhani.variable} font-sans mt-12 w-96`}>
