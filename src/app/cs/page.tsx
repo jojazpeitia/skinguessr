@@ -4,6 +4,21 @@ import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+    DialogFooter
+} from "@/components/ui/dialog"  
+
+import { Rajdhani } from 'next/font/google';
+const rajdhani = Rajdhani({
+    weight: ['500'],
+    subsets: ['latin'],
+    variable: '--font-rajdhani',
+});
 
 export default function CSPage() {
     const [initialZoom, setInitialZoom] = useState<number>(28); 
@@ -17,6 +32,7 @@ export default function CSPage() {
     const [isCorrect, setIsCorrect] = useState<boolean>(false);
     const [attemptedSubmit, setAttemptedSubmit] = useState<boolean>(false);
     const [failedAttempts, setFailedAttempts] = useState<number>(0);
+    const [showScareDialog, setShowScareDialog] = useState<boolean>(false)
     const imageID: number = 0;
 
     const xAxisMovement: number = 90;  // -210 (backup value)
@@ -84,14 +100,15 @@ export default function CSPage() {
     // this is called when failed attempts changes.
     useEffect(() => {
         if (failedAttempts >= 3) {
-          // Show the pop-up to inform the user that they lost
-          alert('You have lost! Please try again.');
-          // Reset the game
-          setIsCorrect(false);
-          setInitialZoom(28);
-          setUserInput('');
-          setAttemptedSubmit(false);
-          setFailedAttempts(0);
+            // Show the pop-up to inform the user that they lost
+            //   alert('You have lost! Please try again.');
+            setShowScareDialog(true);
+            // Reset the game
+            setIsCorrect(false);
+            setInitialZoom(28);
+            setUserInput('');
+            setAttemptedSubmit(false);
+            setFailedAttempts(0);
         }
       }, [failedAttempts]);
 
@@ -160,6 +177,19 @@ export default function CSPage() {
                 {attemptedSubmit && isCorrect && <p className="mt-2 text-lg text-green-500">Correct!</p>}
                 {attemptedSubmit && !isCorrect && <p className="mt-2 text-lg text-red-500">Incorrect!</p>}
             </div> 
+            <Dialog open={showScareDialog} onOpenChange={() => setShowScareDialog(false)}>
+                <DialogContent className={`${rajdhani.variable} font-sans mt-12 w-96`}>
+                    <DialogHeader>
+                        <DialogTitle className='text-2xl'>Score</DialogTitle>
+                        <DialogDescription className='text-md'>
+                            Score: 100
+                        </DialogDescription>
+                    </DialogHeader>
+                    <DialogFooter>
+                        <Button className="w-24 text-lg" type="submit">Share</Button>
+                    </DialogFooter>              
+                </DialogContent>
+            </Dialog>
         </div>
     );
 }
