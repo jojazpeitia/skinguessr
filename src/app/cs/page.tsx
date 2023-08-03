@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -33,7 +33,8 @@ export default function CSPage() {
     const [attemptedSubmit, setAttemptedSubmit] = useState<boolean>(false);
     const [failedAttempts, setFailedAttempts] = useState<number>(0);
     const [showScareDialog, setShowScareDialog] = useState<boolean>(false)
-    const [imageID, setCurrentImageID] = useState<number>(1);
+    const [imageID, setCurrentImageID] = useState<number>(0);
+    const [correctAnswer, setCorrectAnswer] = useState<string>('');
 
     const xAxisMovement: number = 90;  // -210 (backup value)
     const yAxisMovement: number = 50; // -215 (backup value)
@@ -85,17 +86,36 @@ export default function CSPage() {
         setShowSuggestions(false); // Hide the suggestions after selection if needed
     };
 
+    // SUBMIT BUTTON HANDLER
     const handleSubmit = () => {
         const currentImage = images[imageID];
-        // pass the input field
-        // if dragon lore convert to 0 and match to imageID
+
         if (userInput == currentImage.correctAnswer) {
             setIsCorrect(true);
         } else {
             setInitialZoom(prevZoom => prevZoom - 11); 
             setFailedAttempts((prevAttempts) => prevAttempts + 1); // Increment failed attempts
+            setCorrectAnswer(currentImage.correctAnswer);
         }
         setAttemptedSubmit(true);
+    };
+
+    // NEXT BUTTON HANDLER
+    const handleNext = () => {
+        setInitialZoom(28);
+        setUserInput('');
+        setAttemptedSubmit(false);
+        setIsCorrect(false);
+        setFailedAttempts(0);
+
+        // Generate a random image ID that is not the same as the current imageID
+        // TODO: make it keep track of the images ID that were already used to prevent repeats.
+        let newImageID = imageID;
+        while (newImageID === imageID) {
+            newImageID = Math.floor(Math.random() * images.length);
+        }
+
+        setCurrentImageID(newImageID);
     };
 
     // this is called when failed attempts changes.
@@ -104,14 +124,26 @@ export default function CSPage() {
             // Show the pop-up to inform the user that they lost
             //   alert('You have lost! Please try again.');
             setShowScareDialog(true);
-            // Reset the game
+            // Reset the game state
             setIsCorrect(false);
             setInitialZoom(28);
             setUserInput('');
             setAttemptedSubmit(false);
             setFailedAttempts(0);
+
+            // Generate a random image ID that is not the same as the current imageID
+            // Image is being delayed so that initial zoom reset doesn't spoil the image
+            // TODO: make it keep track of the images ID that were already used to prevent repeats.
+            setTimeout(() => {
+            let newImageID = imageID;
+            while (newImageID === imageID) {
+                newImageID = Math.floor(Math.random() * images.length);
+            }
+
+            setCurrentImageID(newImageID);
+            }, 300);
         }
-      }, [failedAttempts]);
+    }, [failedAttempts]);
 
     // fake db
     const images = [
@@ -187,21 +219,41 @@ export default function CSPage() {
                         </ul>
                     </div>
                 )}
-                <Button 
+                {attemptedSubmit && isCorrect ? (
+                    
+                    <Button 
+                    onClick={handleNext}
+                    variant="outline" 
+                    className='w-24 mt-4 text-lg shadow-sm'>
+                        Next
+                    </Button>
+                ) : 
+                (
+                    // Submit button
+                    <Button 
                     onClick={handleSubmit}
                     variant="outline" 
                     className='w-24 mt-4 text-lg shadow-sm'>
-                    {attemptedSubmit ? (isCorrect ? 'Next' : 'Submit') : 'Submit'}
-                </Button>
+                        Submit
+                    </Button>
+                )}
                 {attemptedSubmit && isCorrect && <p className="absolute pl-40 mt-4 text-lg text-green-500">Correct!</p>}
                 {attemptedSubmit && !isCorrect && <p className="absolute pl-40 mt-4 text-lg text-red-500">Incorrect!</p>}
             </div> 
             <Dialog open={showScareDialog} onOpenChange={() => setShowScareDialog(false)}>
                 <DialogContent className={`${rajdhani.variable} font-sans mt-12 w-96`}>
                     <DialogHeader>
-                        <DialogTitle className='text-2xl'>Score</DialogTitle>
+                        <DialogTitle className='text-2xl'>Statistics</DialogTitle>
                         <DialogDescription className='text-md'>
-                            Score: 100
+                            A humble score, not of worthy praise! 
+                            <br/>
+                            Current Streak: 0
+                            <br/>
+                            Max Streak: 0
+                            <br/>
+                            Global Average: 0
+                            <br/>
+                            Answ'r shouldst of been: <span className="text-red-500">{correctAnswer}</span>
                         </DialogDescription>
                     </DialogHeader>
                     <DialogFooter>
