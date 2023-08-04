@@ -4,6 +4,7 @@ import { useState, useEffect} from 'react';
 import Image from 'next/image';
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Loader2 } from "lucide-react"
 import {
     Dialog,
     DialogContent,
@@ -23,6 +24,7 @@ const rajdhani = Rajdhani({
 export default function CSPage() {
     const [initialZoom, setInitialZoom] = useState<number>(28); 
     const [userInput, setUserInput] = useState<string>('');
+    const [imageLoading, setImageLoading] = useState(true);
 
     // Autofill stuff 
     const [data, setData]= useState<string[]>([]);
@@ -115,6 +117,7 @@ export default function CSPage() {
             newImageID = Math.floor(Math.random() * images.length);
         }
 
+        setImageLoading(true);
         setCurrentImageID(newImageID);
     };
 
@@ -156,6 +159,7 @@ export default function CSPage() {
                 newImageID = Math.floor(Math.random() * images.length);
             }
 
+            setImageLoading(true);
             setCurrentImageID(newImageID);
             }, 300);
         }
@@ -165,17 +169,21 @@ export default function CSPage() {
         <div className="flex flex-col items-center justify-center mx-20 space-y-5 md:space-x-20 md:flex-row md:space-y-0 md:min-w-fit">
             <div className="relative overflow-hidden border-4 border-gray-700 rounded shadow-sm h-96 w-96 ">
                 <Image
-                src={images[imageID].src}
-                blurDataURL={images[imageID].blurUrl}
-                placeholder='blur'
-                height={4096}
-                width={4096}
-                quality={100}
-                alt="Dragon Lore"
-                priority={true}
-                style={imageStyle}
-                />   
-            </div>
+                    src={images[imageID].src}
+                    // blurDataURL={images[imageID].blurUrl}
+                    // placeholder='blur'
+                    height={4096}
+                    width={4096}
+                    quality={100}
+                    alt="Skinmap"
+                    priority={true}
+                    style={imageStyle}
+                    onLoadingComplete={() => {
+                        console.log('Image loaded!');
+                        setImageLoading(false);
+                    }}
+                />  
+                </div>
             <div className='text-center'>
                 <h1 className='mb-2 text-2xl italic'> PLACE YOUR GUESS: </h1>
                 <Input 
@@ -183,10 +191,10 @@ export default function CSPage() {
                     onInput={handleInputChange}
                     onFocus={() => setShowSuggestions(true)} // when element is focused
                     onBlur={handleInputBlur} // when element loses focus
-                    className='shadow-sm w-96'
-                />            
+                    className='text-lg shadow-sm w-96'
+                />           
                 {filteredSuggestions.length > 0 && userInput.length > 0 && (
-                    <div className="absolute z-50 mt-2 overflow-y-auto bg-white rounded-sm shadow-md w-96 max-h-80"> 
+                    <div className="absolute z-50 mt-2 overflow-y-auto text-lg bg-white rounded-sm shadow-md w-96 max-h-80"> 
                         <ul>
                             {showSuggestions && filteredSuggestions.map((suggestion) => {
                                 const index = suggestion.toLowerCase().indexOf(userInput.toLowerCase());
@@ -219,12 +227,14 @@ export default function CSPage() {
                         </ul>
                     </div>
                 )}
+
                 {attemptedSubmit && isCorrect ? (
                     
+                    // FF9B01
                     <Button 
                     onClick={handleNext}
-                    variant="outline" 
-                    className='w-24 mt-4 text-lg shadow-sm'>
+                    variant='outline'
+                    className='w-24 mt-4 text-xl shadow-sm'>
                         Next
                     </Button>
                 ) : 
@@ -233,19 +243,21 @@ export default function CSPage() {
                     <Button 
                     onClick={handleSubmit}
                     variant="outline" 
-                    className='w-24 mt-4 text-lg shadow-sm'>
-                        Submit
+                    className='mt-4 text-xl shadow-sm w-36'
+                    disabled={imageLoading}
+                    >
+                        {imageLoading ? <span className='flex'> <Loader2 className='animate-spin'/> &nbsp; Loading</span> : 'Submit'}
                     </Button>
                 )}
-                {attemptedSubmit && isCorrect && <p className="absolute pl-40 mt-4 text-lg text-green-500">Correct!</p>}
-                {attemptedSubmit && !isCorrect && <p className="absolute pl-40 mt-4 text-lg text-red-500">Incorrect!</p>}
+                {attemptedSubmit && isCorrect && <p className="absolute pl-40 mt-4 text-xl text-green-500">Correct!</p>}
+                {attemptedSubmit && !isCorrect && <p className="absolute pl-40 mt-4 text-xl text-red-500">Incorrect!</p>}
             </div> 
             <Dialog open={showScareDialog} onOpenChange={() => setShowScareDialog(false)}>
                 <DialogContent className={`${rajdhani.variable} font-sans mt-12 w-96`}>
                     <DialogHeader>
                         <DialogTitle className='text-2xl'>Statistics</DialogTitle>
                         <DialogDescription className='text-md'>
-                            A humble score, not of worthy praise! 
+                            A humble score, not worthy of praise! 
                             <br/>
                             Current Streak: 0
                             <br/>
