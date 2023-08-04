@@ -1,4 +1,5 @@
-import { CounterStrike2Alt, SkinGuessr, Valorant } from './svgs';
+import { CounterStrike2Alt, SkinGuessr} from './svgs';
+import { FaHorse } from 'react-icons/fa';
 import Link from 'next/link';
 
 interface NavBarIconProps {
@@ -30,7 +31,7 @@ export default function NavMenu() {
                     <SkinGuessr className="text-9xl" />
                 </Link>
                 <Divider/>
-                <NavBarIcon icon={<Valorant className="text-4xl" />} text="Valorant" href="/valorant" />
+                <NavBarIcon icon={<FaHorse className="h-6 text-4xl fill-white" />} text="Changelog" href="/idk" />
              </div>
          </div>
     );
