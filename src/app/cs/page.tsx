@@ -234,7 +234,7 @@ export default function CSPage() {
                     <Button 
                     onClick={handleNext}
                     variant='outline'
-                    className='w-24 mt-4 text-xl shadow-sm'>
+                    className='mt-4 text-xl shadow-sm w-36'>
                         Next
                     </Button>
                 ) : 
