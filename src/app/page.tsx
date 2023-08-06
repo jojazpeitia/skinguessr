@@ -1,7 +1,15 @@
+'use client'
+import { motion } from "framer-motion";
+
 export default function Home() {
   return (
-    <div className="flex justify-center w-screen text-xl "> 
+    <motion.div 
+      className="flex justify-center w-screen text-xl "
+      initial={{opacity: 0, y:20}} animate={{opacity:1, y:0, transition: {delay: 0.3}}} exit={{opacity: 0, y:20}}
+    > 
         Home
-    </div>
+    </motion.div>
   );
 }
+
+
