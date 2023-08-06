@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react"
+import { motion } from "framer-motion";
 import {
     Dialog,
     DialogContent,
@@ -13,6 +14,7 @@ import {
     DialogTitle,
     DialogFooter
 } from "@/components/ui/dialog"  
+
 
 import { Rajdhani } from 'next/font/google';
 const rajdhani = Rajdhani({
@@ -166,7 +168,11 @@ export default function CSPage() {
     }, [failedAttempts, imageID, images.length]);
 
     return (
-        <div className="flex flex-col items-center justify-center mx-20 space-y-5 md:space-x-20 md:flex-row md:space-y-0 md:min-w-fit">
+        // <motion.div initial={{opacity:0, y:20}} animate={{opacity:1, y:0}} exit={{ opacity: 0, y:20}}>
+        <motion.div 
+            className="flex flex-col items-center justify-center mx-20 space-y-5 md:space-x-20 md:flex-row md:space-y-0 md:min-w-fit"
+            initial={{opacity: 0, y:20}} animate={{opacity:1, y:0, transition: {delay: 0.3}}} exit={{opacity: 0, y:20}}
+        >
             <div className="relative overflow-hidden border-4 border-gray-700 rounded shadow-sm h-96 w-96 ">
                 <Image
                     src={images[imageID].src}
@@ -183,7 +189,7 @@ export default function CSPage() {
                         setImageLoading(false);
                     }}
                 />  
-                </div>
+            </div>
             <div className='text-center'>
                 <h1 className='mb-2 text-2xl italic'> PLACE YOUR GUESS: </h1>
                 <Input 
@@ -232,19 +238,19 @@ export default function CSPage() {
                     
                     // FF9B01
                     <Button 
-                    onClick={handleNext}
-                    variant='outline'
-                    className='mt-4 text-xl shadow-sm w-36'>
-                        Next
+                        onClick={handleNext}
+                        variant='outline'
+                        className='mt-4 text-xl shadow-sm w-36'>
+                            Next
                     </Button>
                 ) : 
                 (
                     // Submit button
                     <Button 
-                    onClick={handleSubmit}
-                    variant="outline" 
-                    className='mt-4 text-xl shadow-sm w-36'
-                    disabled={imageLoading}
+                        onClick={handleSubmit}
+                        variant="outline" 
+                        className='mt-4 text-xl shadow-sm w-36'
+                        disabled={imageLoading}
                     >
                         {imageLoading ? <span className='flex'> <Loader2 className='animate-spin'/> &nbsp; Loading</span> : 'Submit'}
                     </Button>
@@ -273,6 +279,6 @@ export default function CSPage() {
                     </DialogFooter>              
                 </DialogContent>
             </Dialog>
-        </div>
+        </motion.div>
     );
 }
