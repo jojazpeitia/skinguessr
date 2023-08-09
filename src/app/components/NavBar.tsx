@@ -31,7 +31,7 @@ export default function NavMenu() {
                     <SkinGuessr className="text-9xl" />
                 </Link>
                 <Divider/>
-                <NavBarIcon icon={<FaHorse className="h-6 text-4xl fill-white" />} text="Changelog" href="/idk" />
+                <NavBarIcon icon={<FaHorse className="h-6 text-4xl fill-white" />} text="Contact" href="/idk" />
              </div>
          </div>
     );

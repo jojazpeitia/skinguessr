@@ -1,5 +1,6 @@
 import './globals.css';
 import NavBar from './components/NavBar';
+import Footer from './components/Footer';
 import { Rajdhani, Inter } from 'next/font/google';
 
 const rajdhani = Rajdhani({
@@ -30,6 +31,9 @@ export default function RootLayout({
             <NavBar />
           </div>
           <main className={`${rajdhani.variable} font-sans mt-12`}>{children}</main>
+          <div className={`${rajdhani.variable} font-sans mt-12`}>
+            <Footer />
+          </div>
       </body>
     </html>
   );
