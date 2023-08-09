@@ -173,7 +173,7 @@ export default function CSPage() {
             className="flex flex-col items-center justify-center mx-20 space-y-5 md:space-x-20 md:flex-row md:space-y-0 md:min-w-fit"
             initial={{opacity: 0, y:20}} animate={{opacity:1, y:0, transition: {delay: 0.3}}} exit={{opacity: 0, y:20}}
         >
-            <div className="relative overflow-hidden border-4 border-gray-700 rounded shadow-sm h-96 w-96 ">
+            <div className="relative overflow-hidden border-4 rounded-lg shadow-md h-96 w-96 ">
                 <Image
                     src={images[imageID].src}
                     // blurDataURL={images[imageID].blurUrl}
@@ -200,7 +200,10 @@ export default function CSPage() {
                     className='text-lg shadow-sm w-96'
                 />           
                 {filteredSuggestions.length > 0 && userInput.length > 0 && (
-                    <div className="absolute z-50 mt-2 overflow-y-auto text-lg bg-white rounded-sm shadow-md w-96 max-h-80"> 
+                    <motion.div 
+                        className="absolute z-50 mt-2 overflow-y-auto text-lg bg-white rounded-sm shadow-md w-96 max-h-80"
+                        initial={{opacity: 0, y:20}} animate={{opacity:1, y:0, transition: {delay: 0.3}}} exit={{opacity: 0, y:20}}
+                        >     
                         <ul>
                             {showSuggestions && filteredSuggestions.map((suggestion) => {
                                 const index = suggestion.toLowerCase().indexOf(userInput.toLowerCase());
@@ -231,7 +234,7 @@ export default function CSPage() {
                                 }
                             })}
                         </ul>
-                    </div>
+                    </motion.div>
                 )}
 
                 {attemptedSubmit && isCorrect ? (
