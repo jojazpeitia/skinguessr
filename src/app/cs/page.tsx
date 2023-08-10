@@ -14,9 +14,9 @@ import {
     DialogTitle,
     DialogFooter
 } from "@/components/ui/dialog"  
-
-
 import { Rajdhani } from 'next/font/google';
+
+
 const rajdhani = Rajdhani({
     weight: ['500'],
     subsets: ['latin'],
@@ -183,7 +183,7 @@ export default function CSPage() {
         <motion.div 
             className="flex flex-col items-center justify-center mx-20 space-y-5 md:space-x-20 md:flex-row md:space-y-0 md:min-w-fit"
             initial={{opacity: 0, y:20}} 
-            animate={{opacity: 1, y:0, transition: {delay: 0.3},}} 
+            animate={{opacity: 1, y:0, transition: {delay: 0.3}}} 
             exit={{opacity: 0, y:20}}
         >
             <div className="relative overflow-hidden border-4 rounded-lg shadow-md h-96 w-96 ">
@@ -205,9 +205,7 @@ export default function CSPage() {
             </div>
             <div className='text-center'>
                 <h1 className='mb-2 text-2xl italic'> PLACE YOUR GUESS: </h1>
-                <motion.div
-                    whileTap={{ scale: 0.97 }}
-                >
+                <motion.div whileTap={{ scale: 0.97 }}>
                     <Input 
                         value={userInput}
                         onInput={handleInputChange}
@@ -223,12 +221,32 @@ export default function CSPage() {
                     variants={itemVariants}
                     >   
                         <div className="absolute z-50 mt-2 overflow-y-auto text-lg bg-white rounded-sm shadow-md w-96 max-h-80">     
-                            <ul>
+                            <motion.ul
+                            variants={{
+                                open: {
+                                  clipPath: "inset(0% 0% 0% 0% round 10px)",
+                                  transition: {
+                                    type: "spring",
+                                    bounce: 0,
+                                    duration: 0.5,
+                                    delayChildren: 0.3,
+                                    staggerChildren: 0.05
+                                  }
+                                },
+                                closed: {
+                                  clipPath: "inset(10% 50% 90% 50% round 10px)",
+                                  transition: {
+                                    type: "spring",
+                                    bounce: 0,
+                                    duration: 0.3
+                                  }
+                                }
+                              }}
+                            >
                                 {showSuggestions && filteredSuggestions.map((suggestion) => {
                                     const index = suggestion.toLowerCase().indexOf(userInput.toLowerCase());
                                         return (
-                                            <li
-                                                
+                                            <li  
                                                 key={suggestion}
                                                 className="px-4 py-2 cursor-pointer"
                                                 onClick={() => handleSuggestionSelect(suggestion)}
@@ -241,30 +259,33 @@ export default function CSPage() {
                                             </li>
                                         );
                                 })}
-                            </ul>
+                            </motion.ul>
                         </div>
                     </motion.div> 
                 )}
-                
                 {attemptedSubmit && isCorrect ? (
                     // FF9B01
-                    <Button 
-                        onClick={handleNext}
-                        variant='outline'
-                        className='mt-4 text-xl shadow-sm w-36'>
-                            Next
-                    </Button>
+                    <motion.div whileTap={{ scale: 0.87 }}>
+                        <Button 
+                            onClick={handleNext}
+                            variant='outline'
+                            className='mt-4 text-xl shadow-sm w-36'>
+                                Next
+                        </Button>
+                    </motion.div>
                 ) : 
                 (
                     // Submit button
-                    <Button 
-                        onClick={handleSubmit}
-                        variant="outline" 
-                        className='mt-4 text-xl shadow-sm w-36'
-                        disabled={imageLoading}
-                    >
-                        {imageLoading ? <span className='flex'> <Loader2 className='animate-spin'/> &nbsp; Loading</span> : 'Submit'}
-                    </Button>
+                    <motion.div whileTap={{ scale: 0.87 }}>
+                        <Button 
+                            onClick={handleSubmit}
+                            variant="outline" 
+                            className='mt-4 text-xl shadow-sm w-36'
+                            disabled={imageLoading}
+                        >
+                            {imageLoading ? <span className='flex'> <Loader2 className='animate-spin'/> &nbsp; Loading</span> : 'Submit'}
+                        </Button>
+                    </motion.div>
                 )}
                 {attemptedSubmit && isCorrect && <p className="absolute pl-40 mt-4 text-xl text-green-500">Correct!</p>}
                 {attemptedSubmit && !isCorrect && <p className="absolute pl-40 mt-4 text-xl text-red-500">Incorrect!</p>}
