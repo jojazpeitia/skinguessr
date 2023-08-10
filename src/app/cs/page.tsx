@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react"
-import { motion } from "framer-motion";
+import { motion, Variants } from "framer-motion";
 import {
     Dialog,
     DialogContent,
@@ -22,6 +22,19 @@ const rajdhani = Rajdhani({
     subsets: ['latin'],
     variable: '--font-rajdhani',
 });
+
+const itemVariants: Variants = {
+    open: {
+      opacity: 1,
+      y: 0,
+      transition: { type: "spring", stiffness: 300, damping: 24 }
+    },
+    closed: { 
+        opacity: 0, 
+        y: 20, 
+        transition: {duration: 0.2 } 
+    }
+};
 
 export default function CSPage() {
     const [initialZoom, setInitialZoom] = useState<number>(28); 
@@ -79,7 +92,6 @@ export default function CSPage() {
     );
 
     const handleInputBlur = () => {
-        // setShowSuggestions(false);
         setTimeout(() => {
             setShowSuggestions(false);
         }, 100); //100ms
@@ -168,10 +180,11 @@ export default function CSPage() {
     }, [failedAttempts, imageID, images.length]);
 
     return (
-        // <motion.div initial={{opacity:0, y:20}} animate={{opacity:1, y:0}} exit={{ opacity: 0, y:20}}>
         <motion.div 
             className="flex flex-col items-center justify-center mx-20 space-y-5 md:space-x-20 md:flex-row md:space-y-0 md:min-w-fit"
-            initial={{opacity: 0, y:20}} animate={{opacity:1, y:0, transition: {delay: 0.3}}} exit={{opacity: 0, y:20}}
+            initial={{opacity: 0, y:20}} 
+            animate={{opacity: 1, y:0, transition: {delay: 0.3},}} 
+            exit={{opacity: 0, y:20}}
         >
             <div className="relative overflow-hidden border-4 rounded-lg shadow-md h-96 w-96 ">
                 <Image
@@ -198,47 +211,38 @@ export default function CSPage() {
                     onFocus={() => setShowSuggestions(true)} // when element is focused
                     onBlur={handleInputBlur} // when element loses focus
                     className='text-lg shadow-sm w-96'
-                />           
+                />       
                 {filteredSuggestions.length > 0 && userInput.length > 0 && (
-                    <motion.div 
-                        className="absolute z-50 mt-2 overflow-y-auto text-lg bg-white rounded-sm shadow-md w-96 max-h-80"
-                        initial={{opacity: 0, y:20}} animate={{opacity:1, y:0, transition: {delay: 0.3}}} exit={{opacity: 0, y:20}}
-                        >     
-                        <ul>
-                            {showSuggestions && filteredSuggestions.map((suggestion) => {
-                                const index = suggestion.toLowerCase().indexOf(userInput.toLowerCase());
-                                if (index >= 0) {
-                                    return (
-                                        <li
-                                            key={suggestion}
-                                            className="px-4 py-2 cursor-pointer"
-                                            onClick={() => handleSuggestionSelect(suggestion)}
-                                        >
-                                            {suggestion.substring(0, index)}
-                                            <span className="text-red-500">
-                                                {suggestion.substring(index, index + userInput.length)} 
-                                            </span>
-                                            {suggestion.substring(index + userInput.length)}
-                                        </li>
-                                    );
-                                } else {
-                                    return (
-                                        <li
-                                            key={suggestion}
-                                            className="px-4 py-2 cursor-pointer"
-                                            onClick={() => handleSuggestionSelect(suggestion)}
-                                        >
-                                            {suggestion}
-                                        </li>
-                                    );
-                                }
-                            })}
-                        </ul>
-                    </motion.div>
+                    <motion.div
+                    initial={"closed"}
+                    animate={showSuggestions ? "open" : "closed"}
+                    variants={itemVariants}
+                    >   
+                        <div className="absolute z-50 mt-2 overflow-y-auto text-lg bg-white rounded-sm shadow-md w-96 max-h-80">     
+                            <ul>
+                                {showSuggestions && filteredSuggestions.map((suggestion) => {
+                                    const index = suggestion.toLowerCase().indexOf(userInput.toLowerCase());
+                                        return (
+                                            <li
+                                                
+                                                key={suggestion}
+                                                className="px-4 py-2 cursor-pointer"
+                                                onClick={() => handleSuggestionSelect(suggestion)}
+                                            >
+                                                {suggestion.substring(0, index)}
+                                                <span className="text-red-500">
+                                                    {suggestion.substring(index, index + userInput.length)} 
+                                                </span>
+                                                {suggestion.substring(index + userInput.length)}
+                                            </li>
+                                        );
+                                })}
+                            </ul>
+                        </div>
+                    </motion.div> 
                 )}
-
+                
                 {attemptedSubmit && isCorrect ? (
-                    
                     // FF9B01
                     <Button 
                         onClick={handleNext}
