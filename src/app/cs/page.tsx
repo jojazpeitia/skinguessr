@@ -205,13 +205,17 @@ export default function CSPage() {
             </div>
             <div className='text-center'>
                 <h1 className='mb-2 text-2xl italic'> PLACE YOUR GUESS: </h1>
-                <Input 
-                    value={userInput}
-                    onInput={handleInputChange}
-                    onFocus={() => setShowSuggestions(true)} // when element is focused
-                    onBlur={handleInputBlur} // when element loses focus
-                    className='text-lg shadow-sm w-96'
-                />       
+                <motion.div
+                    whileTap={{ scale: 0.97 }}
+                >
+                    <Input 
+                        value={userInput}
+                        onInput={handleInputChange}
+                        onFocus={() => setShowSuggestions(true)} // when element is focused
+                        onBlur={handleInputBlur} // when element loses focus
+                        className='text-lg shadow-sm w-96'
+                    />    
+                </motion.div>   
                 {filteredSuggestions.length > 0 && userInput.length > 0 && (
                     <motion.div
                     initial={"closed"}
