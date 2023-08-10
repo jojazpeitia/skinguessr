@@ -186,7 +186,7 @@ export default function CSPage() {
             animate={{opacity: 1, y:0, transition: {delay: 0.3}}} 
             exit={{opacity: 0, y:20}}
         >
-            <div className="relative overflow-hidden border-4 rounded-lg shadow-md h-96 w-96 ">
+            <div className="relative overflow-hidden border-4 rounded-lg shadow-md w-96">
                 <Image
                     src={images[imageID].src}
                     // blurDataURL={images[imageID].blurUrl}

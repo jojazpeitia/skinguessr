@@ -26,12 +26,12 @@ export default function RootLayout({
 }) {
   return (   
     <html lang="en">
-      <body>
+      <body className='min-h-screen overflow-hidden'>
           <div className={`${inter.className}`}>
             <NavBar />
           </div>
           <main className={`${rajdhani.variable} font-sans mt-12`}>{children}</main>
-          <div className={`${rajdhani.variable} font-sans mt-12`}>
+          <div className={`${rajdhani.variable} font-sans`}>
             <Footer />
           </div>
       </body>
