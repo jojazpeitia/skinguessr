@@ -248,7 +248,7 @@ export default function CSPage() {
                                         return (
                                             <li  
                                                 key={suggestion}
-                                                className="px-4 py-2 cursor-pointer"
+                                                className="px-4 py-2 cursor-pointer hover:bg-gray-100"
                                                 onClick={() => handleSuggestionSelect(suggestion)}
                                             >
                                                 {suggestion.substring(0, index)}
