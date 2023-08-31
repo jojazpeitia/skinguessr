@@ -204,9 +204,10 @@ export default function CSPage() {
                 />  
             </div>
             <div className='text-center'>
-                <h1 className='mb-2 text-2xl italic'> PLACE YOUR GUESS: </h1>
+                <label htmlFor="userInput" className='mb-2 text-2xl italic'> PLACE YOUR GUESS: </label>
                 <motion.div whileTap={{ scale: 0.97 }}>
                     <Input 
+                        id='userInput'
                         value={userInput}
                         onInput={handleInputChange}
                         onFocus={() => setShowSuggestions(true)} // when element is focused
