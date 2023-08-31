@@ -1,5 +1,5 @@
 'use client'
-import { CounterStrike2Alt, SkinGuessr} from './svgs';
+import { CounterStrike2Alt, SkinGuessr} from '@/components/svgs';
 import { FaHorse } from 'react-icons/fa';
 import Link from 'next/link';
 import { motion} from "framer-motion";
