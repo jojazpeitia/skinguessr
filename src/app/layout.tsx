@@ -17,6 +17,7 @@ const inter = Inter({
 export const metadata = {
   title: 'SkinGuessr',
   description: 'SkinGuessr',
+  viewport: 'width=512, initial-scale=0.8'
 }
 
 export default function RootLayout({
