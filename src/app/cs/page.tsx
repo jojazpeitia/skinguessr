@@ -161,6 +161,7 @@ export default function CSPage() {
     ]
 
     // this is called when failed attempts changes.
+    // this comment is being added to trigger git
     useEffect(() => {
         if (failedAttempts >= 3) {
             // Show the pop-up to inform the user that they lost
