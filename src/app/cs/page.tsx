@@ -56,12 +56,14 @@ export default function CSPage() {
     const xAxisMovement: number = 90;  // -210 (backup value)
     const yAxisMovement: number = 50; // -215 (backup value)
 
+    const [skinData, setSkinData]= useState([]);
+
     // defines a type for the image style
     type ImageStyle = {
-    transform: string;
-    transition: string;
-    transformOrigin: string;
-  };
+        transform: string;
+        transition: string;
+        transformOrigin: string;
+    };
 
     const imageStyle: ImageStyle = {
         transform: `scale(${initialZoom}) translateX(${xAxisMovement}px) translateY(${yAxisMovement}px)`,
@@ -74,15 +76,24 @@ export default function CSPage() {
     };
 
     // client-side data fetching
-    // fetches api on page load
+    // fetches api's on page load
     // ^ might need to optimize (caching)
     // https://nextjs.org/docs/pages/building-your-application/data-fetching/client-side
     useEffect(() => {
+
+        // skinname api
         fetch('https://skinguessr.vercel.app/api/content')
           .then((res) => res.json())
           .then((data) => {
             setData(data)
-          })
+        })
+
+        // database api
+        fetch('http://localhost:3000/api/skindata')
+        .then((res) => res.json())
+        .then((data) => {
+          setSkinData(data)
+        })
     }, [])
     
 
