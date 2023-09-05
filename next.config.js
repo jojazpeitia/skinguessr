@@ -9,6 +9,9 @@ const nextConfig = {
 
         return config
     },
+    images: {
+        domains: ['skinguessr.s3.us-east-2.amazonaws.com'],
+    },
     // ...other config
 }
 
