@@ -56,7 +56,8 @@ export default function CSPage() {
     const xAxisMovement: number = 90;  // -210 (backup value)
     const yAxisMovement: number = 50; // -215 (backup value)
 
-    const [skinData, setSkinData]= useState([]);
+    // Database Data retrieval
+    const [skinData, setSkinData]= useState<any[]>([]);
 
     // defines a type for the image style
     type ImageStyle = {
@@ -89,7 +90,7 @@ export default function CSPage() {
         })
 
         // database api
-        fetch('http://localhost:3000/api/skindata')
+        fetch('http://skinguessr.vercel.app/api/skindata')
         .then((res) => res.json())
         .then((data) => {
           setSkinData(data)
@@ -115,7 +116,7 @@ export default function CSPage() {
 
     // SUBMIT BUTTON HANDLER
     const handleSubmit = () => {
-        const currentImage = images[imageID];
+        const currentImage = skinData[imageID];
 
         if (userInput == currentImage.correctAnswer) {
             setIsCorrect(true);
@@ -139,26 +140,12 @@ export default function CSPage() {
         // TODO: make it keep track of the images ID that were already used to prevent repeats.
         let newImageID = imageID;
         while (newImageID === imageID) {
-            newImageID = Math.floor(Math.random() * images.length);
+            newImageID = Math.floor(Math.random() * skinData.length);
         }
 
         setImageLoading(true);
         setCurrentImageID(newImageID);
     };
-
-    // fake db
-    const images = [
-        {   
-            id: 1,
-            src: "/images/awp/cu_medieval_dragon_awp.webp",
-            correctAnswer: "AWP | Dragon Lore"
-        },
-        {
-            id: 2,
-            src: "/images/awp/cu_awp_chroma_pink.webp",
-            correctAnswer: "AWP | Chromatic Aberration"
-        }
-    ]
 
     // this is called when failed attempts changes.
     useEffect(() => {
@@ -179,14 +166,16 @@ export default function CSPage() {
             setTimeout(() => {
             let newImageID = imageID;
             while (newImageID === imageID) {
-                newImageID = Math.floor(Math.random() * images.length);
+                newImageID = Math.floor(Math.random() * skinData.length);
             }
 
             setImageLoading(true);
             setCurrentImageID(newImageID);
             }, 300);
         }
-    }, [failedAttempts, imageID, images.length]);
+    }, [failedAttempts, imageID, skinData.length]);
+
+    console.log(skinData[0])
 
     return (
         <motion.div 
@@ -196,19 +185,21 @@ export default function CSPage() {
             exit={{opacity: 0, y:20}}
         >
             <div className="relative overflow-hidden border-4 rounded-lg shadow-md w-96">
-                <Image
-                    src={images[imageID].src}
-                    height={4096}
-                    width={4096}
-                    quality={100}
-                    alt="Skinmap"
-                    priority={true}
-                    style={imageStyle}
-                    onLoadingComplete={() => {
-                        console.log('Image loaded!');
-                        setImageLoading(false);
-                    }}
-                />  
+                {skinData && skinData[imageID] && skinData[imageID]['src'] && (
+                    <Image
+                        src={skinData[imageID]['src']}
+                        height={4096}
+                        width={4096}
+                        quality={100}
+                        alt="Skinmap"
+                        priority={true}
+                        style={imageStyle}
+                        onLoadingComplete={() => {
+                            console.log('Image loaded!');
+                            setImageLoading(false);
+                        }}
+                    />  
+                )}
             </div>
             <div className='text-center'>
                 <label htmlFor="userInput" className='mb-2 text-2xl italic'> PLACE YOUR GUESS: </label>
