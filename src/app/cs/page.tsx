@@ -90,7 +90,7 @@ export default function CSPage() {
         })
 
         // database api
-        fetch('http://skinguessr.vercel.app/api/skindata')
+        fetch('https://skinguessr.vercel.app/api/skindata')
         .then((res) => res.json())
         .then((data) => {
           setSkinData(data)
