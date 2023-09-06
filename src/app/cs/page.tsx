@@ -175,8 +175,6 @@ export default function CSPage() {
         }
     }, [failedAttempts, imageID, skinData.length]);
 
-    console.log(skinData[0])
-
     return (
         <motion.div 
             className="flex flex-col items-center justify-center mx-20 space-y-5 md:space-x-20 md:flex-row md:space-y-0 md:min-w-fit"
@@ -195,7 +193,6 @@ export default function CSPage() {
                         priority={true}
                         style={imageStyle}
                         onLoadingComplete={() => {
-                            console.log('Image loaded!');
                             setImageLoading(false);
                         }}
                     />  
