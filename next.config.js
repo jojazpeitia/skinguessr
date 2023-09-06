@@ -10,7 +10,7 @@ const nextConfig = {
         return config
     },
     images: {
-        domains: ['skinguessr.s3.us-east-2.amazonaws.com'],
+        domains: ['d1b4y9dmiowx8u.cloudfront.net'],
     },
     // ...other config
 }
