@@ -118,12 +118,12 @@ export default function CSPage() {
     const handleSubmit = () => {
         const currentImage = skinData[imageID];
 
-        if (userInput == currentImage.correctAnswer) {
+        if (userInput == currentImage.correctanswer) {
             setIsCorrect(true);
         } else {
             setInitialZoom(prevZoom => prevZoom - 11); 
             setFailedAttempts((prevAttempts) => prevAttempts + 1); // Increment failed attempts
-            setCorrectAnswer(currentImage.correctAnswer);
+            setCorrectAnswer(currentImage.correctanswer);
         }
         setAttemptedSubmit(true);
     };
