@@ -1,17 +1,24 @@
-name: Cypress Tests
+name: Cypress Tests 🧪
 
 on: push
 
 jobs:
   cypress-run:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v3
       # Install NPM dependencies, cache them correctly
       # and run all Cypress tests
       - name: Cypress run
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
         uses: cypress-io/github-action@v6
         with:
           build: npm run build
           start: npm start
+      - name: Run Component tests 🔬
+        uses: cypress-io/github-action@v4
+        with:
+          install: false
+          component: true
