@@ -13,7 +13,7 @@ describe('Navigation', () => {
     // Find a link with an href attribute containing "about" and click it
     cy.get('a[href*="/cs"]').click()
 
-    // The new url should include "/about"
+    // The new url should include "/cs"
     cy.url().should('include', '/cs')
 
     // The new page should contain a label with "PLACE YOUR GUESS"
