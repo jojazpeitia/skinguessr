@@ -1,7 +1,6 @@
 // Cypress E2E Test
 describe('Navigation', () => {
   beforeEach(() => {
-    // Start from the index page
     cy.visit('http://localhost:3000/')
   })
 
