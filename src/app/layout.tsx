@@ -1,6 +1,6 @@
 import './globals.css';
-import NavBar from '@/components/NavBar';
-import Footer from '@/components/Footer';
+import NavBar from '@/components/ui/NavBar';
+import Footer from '@/components/ui/Footer';
 import { Rajdhani, Inter } from 'next/font/google';
 
 const rajdhani = Rajdhani({
