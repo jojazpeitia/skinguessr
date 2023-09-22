@@ -199,16 +199,16 @@ export default function CSPage() {
                 {filteredSuggestions.length > 0 && userInput.length > 0 && (
                     <motion.div initial={"closed"} animate={showSuggestions ? "open" : "closed"} variants={{
                         // Suggestions Animation
-                            open: {
-                                opacity: 1,
-                                y: 0,
-                                transition: { type: "spring", stiffness: 300, damping: 24 }
-                            },
-                            closed: { 
-                                opacity: 0, 
-                                y: 20, 
-                                transition: {duration: 0.2 } 
-                            }
+                            // open: {
+                            //     opacity: 1,
+                            //     y: 0,
+                            //     transition: { type: "spring", stiffness: 300, damping: 24 }
+                            // },
+                            // closed: { 
+                            //     opacity: 0, 
+                            //     y: 20, 
+                            //     transition: {duration: 0.2 } 
+                            // }
                         }}>   
                         <div className="absolute z-50 mt-2 overflow-y-auto text-lg bg-white rounded-sm shadow-md w-96 max-h-80">  
                             <motion.ul variants={{
@@ -272,8 +272,8 @@ export default function CSPage() {
                         </Button>
                     </motion.div>
                 )}
-                {attemptedSubmit && isCorrect && <p className="mt-4 text-xl text-green-500 pl-50 ">Correct!</p>}
-                {attemptedSubmit && !isCorrect && <p className="mt-4 text-xl text-red-500 pl-50 ">Incorrect!</p>}
+                {attemptedSubmit && isCorrect && <p className="absolute pl-40 mt-4 text-xl text-green-500">Correct!</p>}
+                {attemptedSubmit && !isCorrect && <p className="absolute pl-40 mt-4 text-xl text-red-500">Incorrect!</p>}
             </div> 
             <Dialog open={showScareDialog} onOpenChange={() => setShowScareDialog(false)}>
                 <DialogContent className={`${rajdhani.variable} font-sans mt-12 w-96`}>
