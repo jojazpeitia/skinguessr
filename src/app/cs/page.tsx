@@ -23,19 +23,6 @@ const rajdhani = Rajdhani({
     variable: '--font-rajdhani',
 });
 
-const itemVariants: Variants = {
-    open: {
-      opacity: 1,
-      y: 0,
-      transition: { type: "spring", stiffness: 300, damping: 24 }
-    },
-    closed: { 
-        opacity: 0, 
-        y: 20, 
-        transition: {duration: 0.2 } 
-    }
-};
-
 export default function CSPage() {
     const [initialZoom, setInitialZoom] = useState<number>(28); 
     const [userInput, setUserInput] = useState<string>('');
@@ -96,12 +83,11 @@ export default function CSPage() {
           setSkinData(data)
         })
     }, [])
-    
 
     // Filter the suggestions based on the user input
-    const filteredSuggestions = data.filter((name: any) =>
-        name.toLowerCase().includes(userInput.toLowerCase())
-    );
+    const filteredSuggestions = data
+    .filter((name: any) => name.toLowerCase().includes(userInput.toLowerCase()))
+    .slice(0, 30);
 
     const handleInputBlur = () => {
         setTimeout(() => {
@@ -211,14 +197,22 @@ export default function CSPage() {
                     />    
                 </motion.div>   
                 {filteredSuggestions.length > 0 && userInput.length > 0 && (
-                    <motion.div
-                    initial={"closed"}
-                    animate={showSuggestions ? "open" : "closed"}
-                    variants={itemVariants}
-                    >   
-                        <div className="absolute z-50 mt-2 overflow-y-auto text-lg bg-white rounded-sm shadow-md w-96 max-h-80">     
-                            <motion.ul
-                            variants={{
+                    <motion.div initial={"closed"} animate={showSuggestions ? "open" : "closed"} variants={{
+                        // Suggestions Animation
+                            open: {
+                                opacity: 1,
+                                y: 0,
+                                transition: { type: "spring", stiffness: 300, damping: 24 }
+                            },
+                            closed: { 
+                                opacity: 0, 
+                                y: 20, 
+                                transition: {duration: 0.2 } 
+                            }
+                        }}>   
+                        <div className="absolute z-50 mt-2 overflow-y-auto text-lg bg-white rounded-sm shadow-md w-96 max-h-80">  
+                            <motion.ul variants={{
+                                // List Item Animations
                                 open: {
                                   clipPath: "inset(0% 0% 0% 0% round 10px)",
                                   transition: {
@@ -227,7 +221,7 @@ export default function CSPage() {
                                     duration: 0.5,
                                     delayChildren: 0.3,
                                     staggerChildren: 0.05
-                                  }
+                                    }
                                 },
                                 closed: {
                                   clipPath: "inset(10% 50% 90% 50% round 10px)",
@@ -237,16 +231,11 @@ export default function CSPage() {
                                     duration: 0.3
                                   }
                                 }
-                              }}
-                            >
+                              }}>
                                 {showSuggestions && filteredSuggestions.map((suggestion) => {
                                     const index = suggestion.toLowerCase().indexOf(userInput.toLowerCase());
                                         return (
-                                            <li  
-                                                key={suggestion}
-                                                className="px-4 py-2 cursor-pointer hover:bg-gray-100"
-                                                onClick={() => handleSuggestionSelect(suggestion)}
-                                            >
+                                            <li className="px-4 py-2 cursor-pointer hover:bg-gray-100" key={suggestion} onClick={() => handleSuggestionSelect(suggestion)}>
                                                 {suggestion.substring(0, index)}
                                                 <span className="text-red-500">
                                                     {suggestion.substring(index, index + userInput.length)} 
@@ -260,7 +249,7 @@ export default function CSPage() {
                     </motion.div> 
                 )}
                 {attemptedSubmit && isCorrect ? (
-                    // FF9B01
+                    // Next Button
                     <motion.div whileTap={{ scale: 0.87 }}>
                         <Button 
                             onClick={handleNext}
@@ -283,8 +272,8 @@ export default function CSPage() {
                         </Button>
                     </motion.div>
                 )}
-                {attemptedSubmit && isCorrect && <p className="absolute pl-40 mt-4 text-xl text-green-500">Correct!</p>}
-                {attemptedSubmit && !isCorrect && <p className="absolute pl-40 mt-4 text-xl text-red-500">Incorrect!</p>}
+                {attemptedSubmit && isCorrect && <p className="mt-4 text-xl text-green-500 pl-50 ">Correct!</p>}
+                {attemptedSubmit && !isCorrect && <p className="mt-4 text-xl text-red-500 pl-50 ">Incorrect!</p>}
             </div> 
             <Dialog open={showScareDialog} onOpenChange={() => setShowScareDialog(false)}>
                 <DialogContent className={`${rajdhani.variable} font-sans mt-12 w-96`}>
