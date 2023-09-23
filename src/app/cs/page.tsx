@@ -165,7 +165,7 @@ export default function CSPage() {
         <motion.div 
             className="flex flex-col items-center justify-center mx-20 space-y-5 md:space-x-20 md:flex-row md:space-y-0 md:min-w-fit"
             initial={{opacity: 0, y:20}} 
-            animate={{opacity: 1, y:0, transition: {delay: 0.3}}} 
+            animate={{opacity: 1, y:0, transition: {delay: 0.3, duration: 0.3}}} 
             exit={{opacity: 0, y:20}}
         >
             <div className="relative overflow-hidden border-4 rounded-lg shadow-md w-96">

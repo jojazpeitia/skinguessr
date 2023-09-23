@@ -33,7 +33,7 @@ export default function NavMenu() {
                 <Divider/>
                 <motion.div whileTap={{ scale: 0.87 }}>
                     <Link href={'/'} aria-label='Homepage'> 
-                        <SkinGuessr className="text-9xl" />
+                        <SkinGuessr className="w-32"/>
                     </Link>
                 </motion.div>
                 <Divider/>
