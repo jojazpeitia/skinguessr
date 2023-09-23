@@ -6,10 +6,10 @@ describe('Navigation', () => {
 
   it('should navigate to the CS page from the Home Page', () => {
 
-    // We should expect to see Home Text since we are in home page
-    cy.get('h1').contains('Home')
+    // We should expect to see the 'Get 3 chances to' Text since we are in home page
+    cy.get('h1').contains('Get 3 chances to')
 
-    // Find a link with an href attribute containing "about" and click it
+    // Find a link with an href attribute containing "cs" and click it
     cy.get('a[href*="/cs"]').click()
 
     // The new url should include "/cs"
