@@ -3,14 +3,13 @@ generator client {
 }
 
 datasource db {
-  provider     = "mysql"
-  url          = env("DATABASE_URL")
-  relationMode = "prisma"
+  provider = "cockroachdb"
+  url      = env("DATABASE_URL")
 }
 
 model skins {
-  id            Int     @id
-  src           String  @db.VarChar(255)
-  correctanswer String  @db.VarChar(255)
-  rarity        String? @db.VarChar(255)
+  id            BigInt  @id
+  src           String?
+  correctanswer String?
+  rarity        String?
 }
