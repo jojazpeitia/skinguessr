@@ -10,7 +10,7 @@ const nextConfig = {
         return config
     },
     images: {
-        domains: ['d1b4y9dmiowx8u.cloudfront.net'],
+        domains: ['danv22tvagot5.cloudfront.net'],
     },
     // ...other config
 }

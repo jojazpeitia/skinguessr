@@ -12,6 +12,5 @@ export async function GET(request:Request) {
             id: skin.id.toString()  // Convert BigInt id to string
         };
     });
-    console.log(processedSkins);
     return NextResponse.json(processedSkins);
 }
