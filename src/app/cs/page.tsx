@@ -24,7 +24,6 @@ const rajdhani = Rajdhani({
 });
 
 export default function CSPage() {
-    const [initialZoom, setInitialZoom] = useState<number>(28); 
     const [userInput, setUserInput] = useState<string>('');
     const [imageLoading, setImageLoading] = useState(true);
 
@@ -40,8 +39,11 @@ export default function CSPage() {
     const [imageID, setCurrentImageID] = useState<number>(0);
     const [correctAnswer, setCorrectAnswer] = useState<string>('');
 
-    const xAxisMovement: number = 90;  // -210 (backup value)
-    const yAxisMovement: number = 50; // -215 (backup value)
+    const [initialZoom, setInitialZoom] = useState<number>(28); // 28 (backupvalue) 
+    // const xAxisMovement: number = 90;  // -210 (backup value)
+    // const yAxisMovement: number = 50; // -215 (backup value)
+    const xAxisMovement: number = 120;
+    const yAxisMovement: number = 310;
 
     // Database Data retrieval
     const [skinData, setSkinData]= useState<any[]>([]);
@@ -82,6 +84,8 @@ export default function CSPage() {
         .then((data) => {
           setSkinData(data)
         })
+
+        // console.log(skinData.length)
     }, [])
 
     // Filter the suggestions based on the user input
@@ -178,6 +182,7 @@ export default function CSPage() {
                         alt="Skinmap"
                         priority={true}
                         style={imageStyle}
+                        className="pointer-events-none" // Add this class to disable pointer events
                         onLoadingComplete={() => {
                             setImageLoading(false);
                         }}
