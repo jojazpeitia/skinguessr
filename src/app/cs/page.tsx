@@ -32,6 +32,7 @@ export default function CSPage() {
     const [showSuggestions, setShowSuggestions] = useState<boolean>(false);
 
     // Guessing stuff
+    const [isEmptyAnswer, setIsEmptyAnswer] = useState<boolean>(false);
     const [isCorrect, setIsCorrect] = useState<boolean>(false);
     const [attemptedSubmit, setAttemptedSubmit] = useState<boolean>(false);
     const [failedAttempts, setFailedAttempts] = useState<number>(0);
@@ -106,6 +107,14 @@ export default function CSPage() {
 
     // SUBMIT BUTTON HANDLER
     const handleSubmit = () => {
+        // Prevent blank submissions
+        if (!userInput.trim()) {
+            setIsEmptyAnswer(true);
+            return; 
+        }
+
+        setIsEmptyAnswer(false);
+
         const currentImage = skinData[imageID];
 
         if (userInput == currentImage.correctanswer) {
@@ -277,8 +286,13 @@ export default function CSPage() {
                         </Button>
                     </motion.div>
                 )}
+
+                {/* Success or Failure Messages */}
                 {attemptedSubmit && isCorrect && <p className="absolute pl-40 mt-4 text-xl text-green-500">Correct!</p>}
                 {attemptedSubmit && !isCorrect && <p className="absolute pl-40 mt-4 text-xl text-red-500">Incorrect!</p>}
+
+                {/* No Empty Answer Message */}
+                {isEmptyAnswer && <p className="absolute mt-4 text-xl text-orange-400 pl-28">Please enter a guess!</p>}
             </div> 
             <Dialog open={showScareDialog} onOpenChange={() => setShowScareDialog(false)}>
                 <DialogContent className={`${rajdhani.variable} font-sans mt-12 w-96`}>

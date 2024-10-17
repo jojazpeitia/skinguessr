@@ -18,4 +18,19 @@ describe('Navigation', () => {
     // The new page should contain a label with "PLACE YOUR GUESS"
     cy.get('label').contains('PLACE YOUR GUESS:')
   })
+
+  // New test to check for an empty input submission
+  it('should display an error message when submitting with empty input', () => {
+    // Navigate to the CS page as in the previous test
+    cy.get('a[href*="/cs"]').click()
+
+    // Ensure we are on the correct page by checking for the label "PLACE YOUR GUESS:"
+    cy.get('label').contains('PLACE YOUR GUESS:')
+
+    // Click the submit button without entering any text
+    cy.get('button').contains('Submit').click()
+
+    // Check if the warning message appears for empty input
+    cy.get('p').contains('Please enter a guess!').should('be.visible')
+  })
 })
