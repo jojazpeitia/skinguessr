@@ -33,4 +33,25 @@ describe('Navigation', () => {
     // Check if the warning message appears for empty input
     cy.get('p').contains('Please enter a guess!').should('be.visible')
   })
+
+  // New test to check for an invalid answer submission
+  it('should display an error message for an invalid answer submission', () => {
+    // Navigate to the CS page as in the previous test
+    cy.get('a[href*="/cs"]').click()
+
+    // Ensure we are on the correct page by checking for the label "PLACE YOUR GUESS:"
+    cy.get('label').contains('PLACE YOUR GUESS:')
+
+    // Enter an invalid answer 'A' in the input field
+    cy.get('input#userInput').type('A')
+
+    // Unfocus the input to close the suggestion list
+    cy.get('input#userInput').blur()
+
+    // Click the submit button
+    cy.get('button').contains('Submit').click()
+
+    // Check if the invalid answer warning message appears
+    cy.get('p').contains('Invalid answer! Please choose from the list.').should('be.visible')
+  })  
 })

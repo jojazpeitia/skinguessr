@@ -33,6 +33,7 @@ export default function CSPage() {
 
     // Guessing stuff
     const [isEmptyAnswer, setIsEmptyAnswer] = useState<boolean>(false);
+    const [isInvalidAnswer, setIsInvalidAnswer] = useState<boolean>(false);
     const [isCorrect, setIsCorrect] = useState<boolean>(false);
     const [attemptedSubmit, setAttemptedSubmit] = useState<boolean>(false);
     const [failedAttempts, setFailedAttempts] = useState<number>(0);
@@ -112,8 +113,17 @@ export default function CSPage() {
             setIsEmptyAnswer(true);
             return; 
         }
-
         setIsEmptyAnswer(false);
+
+        // Check if the user input is in the filtered suggestions
+        const isInSuggestions = filteredSuggestions.some(
+            (suggestion) => suggestion.toLowerCase() === userInput.toLowerCase()
+        );
+        if (!isInSuggestions) {
+            setIsInvalidAnswer(true); 
+            return; 
+        }
+        setIsInvalidAnswer(false);
 
         const currentImage = skinData[imageID];
 
@@ -286,13 +296,23 @@ export default function CSPage() {
                         </Button>
                     </motion.div>
                 )}
-
-                {/* Success or Failure Messages */}
-                {attemptedSubmit && isCorrect && <p className="absolute pl-40 mt-4 text-xl text-green-500">Correct!</p>}
-                {attemptedSubmit && !isCorrect && <p className="absolute pl-40 mt-4 text-xl text-red-500">Incorrect!</p>}
+                {/* Error Messages: Only show one at a time */}
+                {isInvalidAnswer && (
+                    <p className="absolute pl-4 mt-4 text-xl text-red-400">
+                        Invalid answer! Please choose from the list.
+                    </p>
+                )}
+                {attemptedSubmit && !isInvalidAnswer && isCorrect && (
+                    <p className="absolute pl-40 mt-4 text-xl text-green-500">Correct!</p>
+                )}
+                {attemptedSubmit && !isInvalidAnswer && !isCorrect && (
+                    <p className="absolute pl-40 mt-4 text-xl text-red-500">Incorrect!</p>
+                )}
 
                 {/* No Empty Answer Message */}
-                {isEmptyAnswer && <p className="absolute mt-4 text-xl text-orange-400 pl-28">Please enter a guess!</p>}
+                {isEmptyAnswer && (
+                    <p className="absolute mt-4 text-xl text-orange-400 pl-28">Please enter a guess!</p>
+                )}
             </div> 
             <Dialog open={showScareDialog} onOpenChange={() => setShowScareDialog(false)}>
                 <DialogContent className={`${rajdhani.variable} font-sans mt-12 w-96`}>
