@@ -127,7 +127,7 @@ export default function CSPage() {
 
         const currentImage = skinData[imageID];
 
-        if (userInput == currentImage.correctanswer) {
+        if (userInput.toLowerCase() == currentImage.correctanswer.toLowerCase()) {
             setIsCorrect(true);
         } else {
             setInitialZoom(prevZoom => prevZoom - 11); 
