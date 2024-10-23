@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react"
-import { motion, Variants } from "framer-motion";
+import { motion, Variants, useAnimation } from "framer-motion";
 import {
     Dialog,
     DialogContent,
@@ -26,6 +26,9 @@ const rajdhani = Rajdhani({
 
 export default function CSPage() {
     const itemRefs = useRef<(HTMLLIElement | null)[]>([]);
+
+    const submitButtonControls = useAnimation();
+    const nextButtonControls = useAnimation();
     
     const [userInput, setUserInput] = useState<string>('');
     const [imageLoading, setImageLoading] = useState(true);
@@ -244,6 +247,28 @@ export default function CSPage() {
         }
     }, [highlightedIndex]);
 
+    // Trigger the Submit button animation when attemptedSubmit changes
+    useEffect(() => {
+    if (attemptedSubmit && !isCorrect) {
+        // Trigger the animation when the user submits an answer
+        submitButtonControls.start({
+        scale: [1, 0.87, 1],
+        transition: { duration: 0.2 },
+        });
+    }
+    }, [attemptedSubmit, isCorrect]);
+
+    // Trigger the Next button animation when isCorrect changes
+    useEffect(() => {
+    if (attemptedSubmit && isCorrect) {
+        // Trigger the animation when the user submits a correct answer
+        nextButtonControls.start({
+        scale: [1, 0.87, 1],
+        transition: { duration: 0.2 },
+        });
+    }
+    }, [attemptedSubmit, isCorrect]);
+
     return (
         <motion.div 
             className="flex flex-col items-center justify-center mx-20 space-y-5 md:space-x-20 md:flex-row md:space-y-0 md:min-w-fit"
@@ -348,7 +373,7 @@ export default function CSPage() {
                 )}
                 {attemptedSubmit && isCorrect ? (
                     // Next Button
-                    <motion.div whileTap={{ scale: 0.87 }}>
+                    <motion.div animate={nextButtonControls} whileTap={{ scale: 0.87 }}>
                         <Button 
                             onClick={handleNext}
                             variant='outline'
@@ -359,7 +384,7 @@ export default function CSPage() {
                 ) : 
                 (
                     // Submit button
-                    <motion.div whileTap={{ scale: 0.87 }}>
+                    <motion.div animate={submitButtonControls} whileTap={{ scale: 0.87 }}>
                         <Button 
                             onClick={handleSubmit}
                             variant="outline" 
