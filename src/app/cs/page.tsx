@@ -213,6 +213,7 @@ export default function CSPage() {
                 <motion.div whileTap={{ scale: 0.97 }}>
                     <Input 
                         id='userInput'
+                        autoComplete='off'
                         value={userInput}
                         onInput={handleInputChange}
                         onFocus={() => setShowSuggestions(true)} // when element is focused
@@ -298,7 +299,7 @@ export default function CSPage() {
                 )}
                 {/* Error Messages: Only show one at a time */}
                 {isInvalidAnswer && (
-                    <p className="absolute pl-4 mt-4 text-xl text-red-400">
+                    <p className="absolute pl-4 mt-4 text-xl text-orange-400">
                         Invalid answer! Please choose from the list.
                     </p>
                 )}
