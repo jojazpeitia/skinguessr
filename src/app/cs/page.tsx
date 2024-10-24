@@ -25,7 +25,8 @@ const rajdhani = Rajdhani({
 
 
 export default function CSPage() {
-    const itemRefs = useRef<(HTMLLIElement | null)[]>([]);
+    const itemRefs = useRef<(HTMLLIElement | null)[]>([]); // Create a ref for list items
+    const inputRef = useRef<HTMLInputElement>(null); // Create a ref for the input
 
     const submitButtonControls = useAnimation();
     const nextButtonControls = useAnimation();
@@ -237,7 +238,7 @@ export default function CSPage() {
         }
     }, [failedAttempts, imageID, skinData.length]);
 
-    // hook to scroll the highlughted item into view whenever highlightedIndex changes
+    // hook to scroll the highlighted item into view whenever highlightedIndex changes
     useEffect(() => {
         if (highlightedIndex >= 0 && itemRefs.current[highlightedIndex]) {
           itemRefs.current[highlightedIndex].scrollIntoView({
@@ -246,6 +247,13 @@ export default function CSPage() {
           });
         }
     }, [highlightedIndex]);
+
+    // Focus input when the modal is closed (or when a new skin appears)
+    useEffect(() => {
+        if (!showScareDialog && inputRef.current) {
+            inputRef.current.focus(); // Focus the input when modal is closed
+        }
+    }, [showScareDialog]); // Run the effect whenever the modal closes
 
     // Trigger the Submit button animation when attemptedSubmit changes
     useEffect(() => {
@@ -298,7 +306,9 @@ export default function CSPage() {
                 <motion.div whileTap={{ scale: 0.97 }}>
                     <Input 
                         id='userInput'
+                        ref={inputRef}
                         autoComplete='off'
+                        autoFocus
                         value={userInput}
                         onInput={handleInputChange}
                         onFocus={() => setShowSuggestions(true)} // when element is focused
