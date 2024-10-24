@@ -1,11 +1,11 @@
 'use client'
 
-import { useState, useEffect} from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react"
-import { motion, Variants } from "framer-motion";
+import { motion, Variants, useAnimation } from "framer-motion";
 import {
     Dialog,
     DialogContent,
@@ -23,7 +23,14 @@ const rajdhani = Rajdhani({
     variable: '--font-rajdhani',
 });
 
+
 export default function CSPage() {
+    const itemRefs = useRef<(HTMLLIElement | null)[]>([]); // Create a ref for list items
+    const inputRef = useRef<HTMLInputElement>(null); // Create a ref for the input
+
+    const submitButtonControls = useAnimation();
+    const nextButtonControls = useAnimation();
+    
     const [userInput, setUserInput] = useState<string>('');
     const [imageLoading, setImageLoading] = useState(true);
 
@@ -47,6 +54,9 @@ export default function CSPage() {
     const xAxisMovement: number = 120;
     const yAxisMovement: number = 310;
 
+    //Accessibility stuff
+    const [highlightedIndex, setHighlightedIndex] = useState<number>(-1);
+
     // Database Data retrieval
     const [skinData, setSkinData]= useState<any[]>([]);
 
@@ -65,6 +75,8 @@ export default function CSPage() {
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setUserInput(event.target.value);
+        setShowSuggestions(true); // Show suggestions when user types
+        setHighlightedIndex(-1); // Reset the highlighted index
     };
 
     // client-side data fetching
@@ -104,37 +116,46 @@ export default function CSPage() {
     const handleSuggestionSelect = (suggestion: string) => {
         setUserInput(suggestion);
         setShowSuggestions(false); // Hide the suggestions after selection if needed
+        setHighlightedIndex(() => -1); // Ensure immediate update
     };
 
     // SUBMIT BUTTON HANDLER
     const handleSubmit = () => {
-        // Prevent blank submissions
-        if (!userInput.trim()) {
-            setIsEmptyAnswer(true);
-            return; 
-        }
-        setIsEmptyAnswer(false);
-
-        // Check if the user input is in the filtered suggestions
-        const isInSuggestions = filteredSuggestions.some(
-            (suggestion) => suggestion.toLowerCase() === userInput.toLowerCase()
-        );
-        if (!isInSuggestions) {
-            setIsInvalidAnswer(true); 
-            return; 
-        }
-        setIsInvalidAnswer(false);
-
-        const currentImage = skinData[imageID];
-
-        if (userInput.toLowerCase() == currentImage.correctanswer.toLowerCase()) {
-            setIsCorrect(true);
-        } else {
-            setInitialZoom(prevZoom => prevZoom - 11); 
-            setFailedAttempts((prevAttempts) => prevAttempts + 1); // Increment failed attempts
-            setCorrectAnswer(currentImage.correctanswer);
-        }
-        setAttemptedSubmit(true);
+        if (!userInput || !userInput.trim()) {
+                setIsEmptyAnswer(true);
+                return;
+            }
+            setIsEmptyAnswer(false);
+        
+            // Check if the user input is in the data
+            const isInSuggestions = data.some(
+            (suggestion) =>
+                suggestion && suggestion.toLowerCase() === userInput.toLowerCase()
+            );
+            if (!isInSuggestions) {
+                setIsInvalidAnswer(true);
+                return;
+            }
+            setIsInvalidAnswer(false);
+        
+            const currentImage = skinData[imageID];
+        
+            if (!currentImage || !currentImage.correctanswer) {
+                console.error('currentImage or currentImage.correctanswer is undefined');
+                setIsInvalidAnswer(true);
+                return;
+            }
+        
+            if (
+                userInput.toLowerCase() === currentImage.correctanswer.toLowerCase()
+            ) {
+                setIsCorrect(true);
+            } else {
+                setInitialZoom((prevZoom) => prevZoom - 11);
+                setFailedAttempts((prevAttempts) => prevAttempts + 1);
+                setCorrectAnswer(currentImage.correctanswer);
+            }
+            setAttemptedSubmit(true);
     };
 
     // NEXT BUTTON HANDLER
@@ -155,6 +176,39 @@ export default function CSPage() {
         setImageLoading(true);
         setCurrentImageID(newImageID);
     };
+
+    const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+        if (event.key === 'ArrowDown') {
+                event.preventDefault(); // Prevent default cursor movement
+                setShowSuggestions(true); // Ensure suggestions are visible
+                setHighlightedIndex((prevIndex) =>
+                prevIndex < filteredSuggestions.length - 1 ? prevIndex + 1 : 0
+            );
+        } else if (event.key === 'ArrowUp') {
+                event.preventDefault();
+                setShowSuggestions(true);
+                setHighlightedIndex((prevIndex) =>
+                prevIndex > 0 ? prevIndex - 1 : filteredSuggestions.length - 1
+            );
+        } else if (event.key === 'Enter') {
+            event.preventDefault(); // Prevent default form submission
+
+            if (isCorrect) {
+              handleNext(); // Proceed to next question if answer was correct
+            } else if (
+              highlightedIndex >= 0 &&
+              highlightedIndex < filteredSuggestions.length &&
+              filteredSuggestions[highlightedIndex]
+            ) {
+              handleSuggestionSelect(filteredSuggestions[highlightedIndex]);
+            } else {
+              handleSubmit();
+            }
+        } else {
+            // Reset highlighted index for other keys
+            setHighlightedIndex(-1);
+        }
+    };    
 
     // this is called when failed attempts changes.
     useEffect(() => {
@@ -183,6 +237,45 @@ export default function CSPage() {
             }, 300);
         }
     }, [failedAttempts, imageID, skinData.length]);
+
+    // hook to scroll the highlighted item into view whenever highlightedIndex changes
+    useEffect(() => {
+        if (highlightedIndex >= 0 && itemRefs.current[highlightedIndex]) {
+          itemRefs.current[highlightedIndex].scrollIntoView({
+            behavior: "auto",
+            block: "nearest",
+          });
+        }
+    }, [highlightedIndex]);
+
+    // Focus input when the modal is closed (or when a new skin appears)
+    useEffect(() => {
+        if (!showScareDialog && inputRef.current) {
+            inputRef.current.focus(); // Focus the input when modal is closed
+        }
+    }, [showScareDialog]); // Run the effect whenever the modal closes
+
+    // Trigger the Submit button animation when attemptedSubmit changes
+    useEffect(() => {
+    if (attemptedSubmit && !isCorrect) {
+        // Trigger the animation when the user submits an answer
+        submitButtonControls.start({
+        scale: [1, 0.87, 1],
+        transition: { duration: 0.2 },
+        });
+    }
+    }, [attemptedSubmit, isCorrect]);
+
+    // Trigger the Next button animation when isCorrect changes
+    useEffect(() => {
+    if (attemptedSubmit && isCorrect) {
+        // Trigger the animation when the user submits a correct answer
+        nextButtonControls.start({
+        scale: [1, 0.87, 1],
+        transition: { duration: 0.2 },
+        });
+    }
+    }, [attemptedSubmit, isCorrect]);
 
     return (
         <motion.div 
@@ -213,11 +306,14 @@ export default function CSPage() {
                 <motion.div whileTap={{ scale: 0.97 }}>
                     <Input 
                         id='userInput'
+                        ref={inputRef}
                         autoComplete='off'
+                        autoFocus
                         value={userInput}
                         onInput={handleInputChange}
                         onFocus={() => setShowSuggestions(true)} // when element is focused
                         onBlur={handleInputBlur} // when element loses focus
+                        onKeyDown={handleKeyDown} 
                         className='text-lg shadow-sm w-96'
                     />    
                 </motion.div>   
@@ -257,15 +353,27 @@ export default function CSPage() {
                                   }
                                 }
                               }}>
-                                {showSuggestions && filteredSuggestions.map((suggestion) => {
-                                    const index = suggestion.toLowerCase().indexOf(userInput.toLowerCase());
+                                {showSuggestions &&
+                                    filteredSuggestions.map((suggestion, index) => {
+                                        const matchIndex = suggestion.toLowerCase().indexOf(userInput.toLowerCase());
+                                        const isHighlighted = index === highlightedIndex;
                                         return (
-                                            <li className="px-4 py-2 cursor-pointer hover:bg-gray-100" key={suggestion} onClick={() => handleSuggestionSelect(suggestion)}>
-                                                {suggestion.substring(0, index)}
+                                            <li
+                                                key={suggestion}
+                                                ref={(el) => {
+                                                    itemRefs.current[index] = el; // Assign the element to the ref array
+                                                }}
+                                                className={`px-4 py-2 cursor-pointer hover:bg-gray-100 ${
+                                                isHighlighted ? "bg-gray-200" : ""
+                                                }`}
+                                                onClick={() => handleSuggestionSelect(suggestion)}
+                                                onMouseEnter={() => setHighlightedIndex(index)}
+                                            >
+                                                {suggestion.substring(0, matchIndex)}
                                                 <span className="text-red-500">
-                                                    {suggestion.substring(index, index + userInput.length)} 
+                                                {suggestion.substring(matchIndex, matchIndex + userInput.length)}
                                                 </span>
-                                                {suggestion.substring(index + userInput.length)}
+                                                {suggestion.substring(matchIndex + userInput.length)}
                                             </li>
                                         );
                                 })}
@@ -275,7 +383,7 @@ export default function CSPage() {
                 )}
                 {attemptedSubmit && isCorrect ? (
                     // Next Button
-                    <motion.div whileTap={{ scale: 0.87 }}>
+                    <motion.div animate={nextButtonControls} whileTap={{ scale: 0.87 }}>
                         <Button 
                             onClick={handleNext}
                             variant='outline'
@@ -286,7 +394,7 @@ export default function CSPage() {
                 ) : 
                 (
                     // Submit button
-                    <motion.div whileTap={{ scale: 0.87 }}>
+                    <motion.div animate={submitButtonControls} whileTap={{ scale: 0.87 }}>
                         <Button 
                             onClick={handleSubmit}
                             variant="outline" 
